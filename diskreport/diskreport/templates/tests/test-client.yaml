@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "diskreport.fullname" . }}-test-client"
+  labels:
+    {{- include "diskreport.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test,post-install,post-upgrade
+spec:
+  containers:
+    - name: test-client
+      image: alpine
+      command: ['sh']
+      args:
+      - '-c'
+      - |
+        set -e
+        echo {{ include "diskreport.fullname" . }}
+        apk add curl bash openssl findutils
+        export UPLOAD_SERVER=http://{{ include "diskreport.fullname" . }}-receiver
+        export API_SERVER=http://{{ include "diskreport.fullname" . }}-frontend
+        export PRIV_64=LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFcEFJQkFBS0NBUUVBemJENkhXVlZmd1J3L3F0UmZzMkptUW53NlE2Yy9HTlhTV0lDc05weXhYMzV0MFkvCk5ZN1BRM2ZFMnNMZ3FVUkhNdkJUaG9FTUJIeVRIeFh2OFlJWjYxa1d1Q010ZGpTRjJ6WGsraGNoRy9EdjBkb2cKak56ajh3RWNic2RiY2JHTzRSYWR2a0k0WjNqVGF4VWhZSUczNVJWOWZCYzBqK0poUjRsZVEyUCtsWDZ2a1ZqcgpEYVFTYTB4ZUUxbE9ZZkZFeWZLQ3BpcFBBZGZGQXhpU2NrOEx4Vk1WdllNNGE0MXcrRW5KT0RZcktKNFZRajhQClJEcFNpdG5RdkNkVUFGNmRJTjU4Q1BpcSthMFRPazhCVUFxNTNKUFlQcXVlTEp5K2pvR04xUnRsek5XVXpGNmoKL1l3UG9RL00xZXl5VVhyRzY2T3paZnBkSnYrZFdUU05ndTRra3dJREFRQUJBb0lCQUM0MlNMczUvUTlnYkJLTApZdS9lTmIvUVgvTzhlTUNyZ1B6WHJFc1hpUm1keC9ESk00SlE1M2Y4L0prNWwwZndNeDdhcDZsY2JOckZNamlWCnNTYk5XQTFzSXBLVU5LNk45bFRkc3VnTk1qOFl6b2lUUFNUb3E3MzR6ZTZGazZIamhucERub1VVVTUvTG9aUTUKVnhwYmlubEpicnZtYXNTNDA2cEN6bzdOZEhFWmNoaHVnQ0c1YUJaQ2Nkd3JFQ1Q0VkV5VHM4ZFlYVlJob2V2UApReG1NZUtkQTIwYlJmenNKblNWejVZRlZMK1hCdjk2d1pyeEZ5cmZhNUlwN3RaY0VrWi9FcGIzeVNQYTVIcVhKCklaUWtvaWJnMURvOS9IUk1WaDVpTkJHamovR3RxcFJiWTRrL0w5c05VbkE5bWV6VzFUQW1EVnZXaUtraXRGL2wKQzd4WXYyRUNnWUVBOERpQVVVeEgyd1JjT0VJNjhPNEs0VmZ6UWZYUzhtQ1h2MXpzcjRWdkc0cUNnbjdnWG5iMgpNakJnYVVsOHkveVB0L3pQbkhUYVBWdDFwSEo3dVhHWkYyQUx3TTJqQTlET203SXBwSWdhOUVOMjBsTVRWc1FuCllXTklQbFBUSGVOaHpTQnhYRVgrT2E4V1lKRG9Jb2ZxajU3U1lYOVlBYVhucVZVNVZULzVXYmNDZ1lFQTJ6UFcKUzdodWVjRk41T0o5T0lYbmVxaHpxc04yeVBoWEVrZ09BQjdpMGpER0dXZTVmT1NtWnpRYmlTYnd0WkVsMTd3VApuMkNsL28zT3BEc3pTWTd4VTFPR3dyS2JKaEJzQ2hXL0FGVHdKalRZWlg0Nnd3V013ays2NXZySlF3V28rbm1LCmhyY0ZGcWRtY2hXV0oyenFHcW9wZW51c2dLWFROeFVpYzBnN3ZBVUNnWUVBdTJRWUZWTmdLbVk0V2xxd0NBcHAKeW1nRmgwcndoOHI2RlhtejJTaEtDRDRBbVRQSWEyaDVuYVZIVUZyWFUzbHQwNlVQZjRsWVJjejI5SldxRm51YgpaVFN6ZG0vejNxSWd5aXd0ZUFBRXBzK0ovWUI0OFpLSzlkbXhIWTNlZnM1R0dQSlovQlZOd0VucE51TlRjcng4CktoVkhJRzlxZzc2Yi9PaFNsVUlXamZrQ2dZQTNQY1VQcUJjUFVBdlZWczYvNDk4R0psV2YvMHA4TXptZVBkSnAKYlY4MElWNkxJSHk2WU5VZXhSNzdYWGprQ1FSRWJmMXorT05jVjFod1F3c1Z5cFErcjVvU2p2aFNpMmp1MGJRawozVUw0SGZFN0FxakVaUzJuK25mYnBlLzZsLzZSd1BlTUk2dUFuZ2RQVU9sYVhqUlJLL2p3Q1NMYitPNVZ2MW5ECk83enlFUUtCZ1FDSWVnVWFQc1pVU0NqMnQ0OGRjZ25RWTFFckxTVTFHdWpId2NBckRuYi8yMUNYeTd2VFZQUWwKbHBBZzJ4V3dZK2RWQUhwdHdiUTRZYk5HSXJLc3pMWU1oUlRhd25VK2h6NzNQY2JrNVN5SXhReEhZNW9PR0tTTApqMUl0ekpHMjQ4Nnd1YWR1b3Q4VU02VlFmZ1k5OGdVZFhVYythQmtpbGNlanNHUUM0STladWc9PQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo=
+        export REPORT_HOSTNAME=helm-test
+        curl -# -o diskreport.sh ${API_SERVER}/diskreport.sh
+        chmod +x diskreport.sh
+                            ./diskreport.sh 1 ; sleep 1
+        apk add openssh   ; ./diskreport.sh   ; sleep 1
+        apk add nginx     ; ./diskreport.sh   ; sleep 1
+        apk del openssh   ; ./diskreport.sh   ; sleep 1
+        apk del nginx     ; ./diskreport.sh   ; sleep 1
+        echo Done
+  restartPolicy: Never
