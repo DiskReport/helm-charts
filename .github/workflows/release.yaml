@@ -26,6 +26,12 @@ jobs:
         with:
           version: v3.7.1
 
+      - name: Add repositories
+        run: |
+          for dir in $(ls -d diskreport/*/); do
+            helm dependency list $dir 2> /dev/null | tail +2 | head -n -1 | awk '{ print "helm repo add " $1 " " $3 }' | while read cmd; do $cmd; done
+          done
+
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@be16258da8010256c6e82849661221415f031968 # v1.5.0
         env:
