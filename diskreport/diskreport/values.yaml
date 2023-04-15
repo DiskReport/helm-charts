@@ -357,6 +357,9 @@ cleaner:
 postgresql:
   enabled: true
   primary:
+    resources:
+      requests:
+        cpu: 10m
     initdb:
       scripts:
         create_db.sql: |
