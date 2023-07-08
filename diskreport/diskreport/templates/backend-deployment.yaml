@@ -64,6 +64,7 @@ spec:
               containerPort: 3000
               protocol: TCP
           startupProbe:
+            failureThreshold: 30
             httpGet:
               path: /api/ping
               port: http

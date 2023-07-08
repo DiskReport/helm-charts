@@ -44,6 +44,7 @@ spec:
               containerPort: 3000
               protocol: TCP
           startupProbe:
+            failureThreshold: 30
             httpGet:
               path: /
               port: http
